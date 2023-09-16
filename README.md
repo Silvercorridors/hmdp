@@ -9,3 +9,6 @@
     - 基于Redis的Stream结构作为消息队列实现异步秒杀
 ## 主要使用的技术栈
 `Java` `SpringBoot` `redis` `mybatis plus`
+
+## 业务功能
+点赞：![img.png](notes/img/thumbsUp.png)

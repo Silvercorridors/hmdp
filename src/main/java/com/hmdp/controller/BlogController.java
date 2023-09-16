@@ -48,24 +48,22 @@ public class BlogController {
         return Result.ok(blog.getId());
     }
 
+    /**
+     * 同一个用户只能点赞一次，再次点击则取消点赞
+     * 如果当前用户已经点赞，则点赞按钮高亮显示(前端实现，判断isLike属性)
+     * 实现：给Blog类增加一个isLike字段，标识此blog是否被当前用户点赞
+     * redis存放一个set集合判断是否点赞过，未点赞则点赞类+1，已点赞过则点赞数-1
+     * @param id
+     * @return
+     */
     @PutMapping("/like/{id}")
     public Result likeBlog(@PathVariable("id") Long id) {
-        // 修改点赞数量
-        blogService.update()
-                .setSql("liked = liked + 1").eq("id", id).update();
-        return Result.ok();
+        return blogService.likeBlog(id);
     }
 
     @GetMapping("/of/me")
     public Result queryMyBlog(@RequestParam(value = "current", defaultValue = "1") Integer current) {
-        // 获取登录用户
-        UserDTO user = UserHolder.getUser();
-        // 根据用户查询
-        Page<Blog> page = blogService.query()
-                .eq("user_id", user.getId()).page(new Page<>(current, SystemConstants.MAX_PAGE_SIZE));
-        // 获取当前页数据
-        List<Blog> records = page.getRecords();
-        return Result.ok(records);
+        return blogService.queryMyBlog(current);
     }
 
     @GetMapping("/hot")
